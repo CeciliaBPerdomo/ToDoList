@@ -1,25 +1,53 @@
-import React from "react";
+import React, {useState} from "react";
 
 //include images into your bundle
 import rigoImage from "../../img/rigo-baby.jpg";
 
 //create your first component
 const Home = () => {
+
+	const [tarea, setTarea] = useState("");
+	const [lista, setLista] = useState([]); 
+	//const [Eliminados, setEliminado] = useState([])
+	
+	function envioTarea(e){
+		if(e.key === 'Enter'){
+			e.preventDefault()
+			//setLista(Lista.concat(Tarea));
+			setLista([...lista, tarea])
+			setTarea("")
+		}
+	}
+
+	function eliminar(id){ 
+		let eliminados = []
+		eliminados = lista.filter((item, index) => {
+			if (index !== id){
+				return item
+			}
+		})
+		setLista(eliminados)
+	}
+
 	return (
-		<div className="text-center">
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
+		<div style={{margin: "15px"}}>
+			<div>	
+				<input className="form-control" 
+				type="text" 
+				value={tarea}
+				onChange={(e) => setTarea(e.target.value)}
+				onKeyPress={envioTarea}>
+				</input>
+			</div>
+
+			<ul className="list-group">
+				{lista.map((item, id) => (<li className="list-group-item" key={id}>{item} 
+				<button onClick={() => eliminar(id)} type="button" 
+				className="btn btn-outline-secondary float-end">Chau!</button>
+				</li>))}	
+			</ul>
 		</div>
+
 	);
 };
 
